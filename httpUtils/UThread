@@ -1,0 +1,48 @@
+package com.tx.wlgl.hn.http;
+
+import java.util.HashMap;
+
+public class UThread extends Thread implements Runnable {
+
+    private String url;
+    private HashMap<String, String> post;
+    
+    private String stri;
+    private int flags = 0;
+    
+    private static String result = "";
+	RequestManager requestM =RequestManager.getInstance();
+    
+    
+    public UThread(String u, HashMap<String, String> p) {
+        url = u;
+        post = p;
+    }
+    
+    public UThread(String u, String ss,int flag) {
+        url = u;
+        stri = ss;
+        flags = flag;
+    }
+    
+    @Override
+    public void run() {
+//        String str = PostUtils.sendPost(url, post);
+    
+    	if(flags==1){
+    		result = requestM.sendJsonToServer(url, stri);
+    		flags = 0;
+    	}else if(flags==0){
+    		 result =  requestM.requestSyn(url, 2, post);
+    	}
+    	
+    }
+
+    public String getResult() {
+    	
+//    	System.out.println("4555"+result);
+    	
+       return result;
+        
+    }
+}
